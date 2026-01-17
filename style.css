@@ -325,6 +325,10 @@
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.7);
         }
+.event-meta a{
+       margin-left: 2px;
+       
+}
 
         /* Responsive Design */
         @media (max-width: 768px) {
