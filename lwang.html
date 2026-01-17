@@ -1,0 +1,32 @@
+<!-- Excel Data Display Section -->
+<section class="excel-section" id="data">
+  <div class="container">
+      <div class="section-title">
+          <h2>Family Information & Data</h2>
+          <button id="refreshBtn" class="upload-btn" style="margin-left: 20px;">
+              <i class="fas fa-sync-alt"></i> Refresh Data
+          </button>
+      </div>
+      
+      <div class="data-container">
+          <!-- Google Sheets Embed -->
+          <div id="google-sheets-data">
+              <iframe 
+                  id="sheetsFrame"
+                  src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSlc1Q4FOHnx8FK5R5fuYsvla28q50K3ImRxI2fPM5ym00FxkbtP81WB8WBk1fYfpaMKiUgHn_N4b2_/pubhtml?widget=true&amp;headers=false"
+                  width="100%" 
+                  height="500"
+                  style="border: none; border-radius: 8px;">
+              </iframe>
+              
+              <div style="text-align: center; margin-top: 20px; color: #666;">
+                  <p><i class="fas fa-info-circle"></i> Changes in Google Sheets automatically appear here</p>
+                  <p style="font-size: 0.9rem;">Sheet last updated: <span id="lastUpdate">Loading...</span></p>
+              </div>
+          </div>
+          
+          <!-- Alternative: Table display -->
+          <div id="excelTable" style="display: none;"></div>
+      </div>
+  </div>
+</section>

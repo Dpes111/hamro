@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hamro Pariwar - Family Organization</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-users"></i>
+                <div class="logo-text">
+                    <h1>Hamro Pariwar</h1>
+                    <p>0ur Family</p>
+                </div>
+            </div>
+            
+            <div class="mobile-menu" id="mobileMenu">
+                <i class="fas fa-bars"></i>
+            </div>
+            
+            <nav class="nav-links" id="navLinks">
+                <a href="#home">Home</a>
+                <a href="#events">Events</a>
+                <a href="#contact">Contact</a>
+                <a href="login.html" style="background-color: var(--secondary); color: white;">Family Login</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h2>Welcome to Hamro Pariwar</h2>
+            <p>A platform to stay connected, organized, and celebrate together as one big family.</p>
+            
+            <div class="family-motto">
+                "एकता मा शक्ति छ" - Strength in Unity
+            </div>
+        </div>
+    </section>
+
+    <!-- Excel Data Display Section -->
+
+    <!-- Events Section -->
+    <section class="events-section" id="events">
+        <div class="container">
+            <div class="section-title">
+                <h2>Upcoming Family Events</h2>
+            </div>
+            
+            <div class="events-grid">
+                <div class="event-card">
+                    <div class="event-date">
+                        <div class="day">18</div>
+                        <div class="month">January</div>
+                    </div>
+                    <div class="event-content">
+                        <h3>LWANG HOMESTAY</h3>
+                        <p>Going for a family night out this winter</p>
+                        <div class="event-meta">
+                            <span><i class="fas fa-map-marker-alt"></i> lwang</span>
+                            <span><i class="fas fa-clock"></i> 1:00 PM</span>
+                            <a href="lwang.html">Details</a>
+                        </div>
+                    </div>
+                 </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="contact-info">
+                    <h3>Contact Hamro Pariwar</h3>
+                    <p><i class="fas fa-envelope"></i> contact@hampopariwar.com</p>
+                    <p><i class="fas fa-phone"></i> +977 98XXXXXXX</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Kathmandu, Nepal</p>
+                </div>
+                
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Hamro Pariwar. All rights reserved. | Family Organization Platform</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Excel Upload and Display -->
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenu').addEventListener('click', function() {
+            document.getElementById('navLinks').classList.toggle('active');
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    // Close mobile menu if open
+                    document.getElementById('navLinks').classList.remove('active');
+                    
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Excel file upload functionality
+        document.getElementById('uploadBtn').addEventListener('click', function() {
+            document.getElementById('excelUpload').click();
+        });
+
+        document.getElementById('excelUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, {type: 'array'});
+                
+                // Get first sheet
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                
+                // Convert to HTML table
+                const html = XLSX.utils.sheet_to_html(worksheet, {
+                    id: "family-data-table",
+                    editable: false
+                });
+                
+                // Display the table
+                const tableContainer = document.getElementById('excelTable');
+                tableContainer.innerHTML = html;
+                tableContainer.style.display = 'block';
+                
+                // Add some styling to the table
+                const table = tableContainer.querySelector('table');
+                if (table) {
+                    table.style.width = '100%';
+                    table.style.borderCollapse = 'collapse';
+                    table.style.marginTop = '20px';
+                    
+                    // Style table headers
+                    const thElements = table.querySelectorAll('th');
+                    thElements.forEach(th => {
+                        th.style.backgroundColor = 'var(--primary)';
+                        th.style.color = 'white';
+                        th.style.padding = '12px';
+                        th.style.textAlign = 'left';
+                        th.style.border = '1px solid #ddd';
+                    });
+                    
+                    // Style table cells
+                    const tdElements = table.querySelectorAll('td');
+                    tdElements.forEach(td => {
+                        td.style.padding = '10px';
+                        td.style.border = '1px solid #ddd';
+                    });
+                    
+                    // Style alternating rows
+                    const trElements = table.querySelectorAll('tr');
+                    trElements.forEach((tr, index) => {
+                        if (index % 2 === 0 && index > 0) {
+                            tr.style.backgroundColor = '#f9f9f9';
+                        }
+                    });
+                }
+                
+                // Update placeholder message
+                const placeholder = document.querySelector('.data-placeholder');
+                placeholder.querySelector('h3').textContent = 'Family Database - ' + file.name;
+                placeholder.querySelector('p').textContent = 'Your family data is displayed below.';
+                
+                // Add download button
+                const downloadBtn = document.createElement('button');
+                downloadBtn.className = 'upload-btn';
+                downloadBtn.innerHTML = '<i class="fas fa-download"></i> Download Updated Data';
+                downloadBtn.style.marginTop = '20px';
+                downloadBtn.style.backgroundColor = 'var(--accent)';
+                downloadBtn.onclick = function() {
+                    // Create download link for updated Excel file
+                    const wb = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(wb, worksheet, "Family Data");
+                    XLSX.writeFile(wb, "updated_family_data.xlsx");
+                };
+                
+                // Add to container
+                tableContainer.appendChild(downloadBtn);
+            };
+            
+            reader.readAsArrayBuffer(file);
+        });
+
+        // Sample data table for demo (remove this in production)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create a sample table for demonstration
+            const sampleData = `
+                <table style="width:100%; border-collapse: collapse; margin-top: 20px;">
+                    <thead>
+                        <tr>
+                            <th style="background-color: #2E7D32; color: white; padding: 12px; border: 1px solid #ddd;">Name</th>
+                            <th style="background-color: #2E7D32; color: white; padding: 12px; border: 1px solid #ddd;">Relation</th>
+                            <th style="background-color: #2E7D32; color: white; padding: 12px; border: 1px solid #ddd;">Phone</th>
+                            <th style="background-color: #2E7D32; color: white; padding: 12px; border: 1px solid #ddd;">Address</th>
+                            <th style="background-color: #2E7D32; color: white; padding: 12px; border: 1px solid #ddd;">Birthday</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background-color: #f9f9f9;">
+                            <td style="padding: 10px; border: 1px solid #ddd;">Ram Sharma</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Grandfather</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">98XXXXXXX1</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Kathmandu</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Jan 15</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Sita Sharma</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Grandmother</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">98XXXXXXX2</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Kathmandu</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Mar 22</td>
+                        </tr>
+                        <tr style="background-color: #f9f9f9;">
+                            <td style="padding: 10px; border: 1px solid #ddd;">Hari Sharma</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Uncle</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">98XXXXXXX3</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Pokhara</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Aug 10</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 15px; color: #666; font-style: italic;">
+                    Upload your own Excel file to replace this sample data with your actual family information.
+                </p>
+            `;
+            
+            // Uncomment the line below to show sample data on page load
+            // document.getElementById('excelTable').innerHTML = sampleData;
+        });
+    </script>
+</body>
+</html>
